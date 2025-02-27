@@ -54,15 +54,6 @@ const HeroSection = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           whileHover={{ scale: 1.05 }}
-          animate={{
-            y: [0, -10, 0],
-            x: [0, 5, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
         >
           <div className="relative w-full max-w-md">
             <div className="absolute inset-0 bg-purple-600 rounded-full blur-3xl opacity-20"></div>
