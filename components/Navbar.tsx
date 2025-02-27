@@ -1,26 +1,19 @@
 "use client";
-
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Layers } from 'lucide-react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { Layers, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollY } = useScroll();
-
   const navbarHeight = useTransform(scrollY, [0, 100], ['5rem', '4rem']);
-  const navbarBackground = useTransform(
-    scrollY,
-    [0, 100],
-    ['rgba(0, 0, 0, 0)', 'rgba(10, 10, 20, 0.95)']
-  );
+  const navbarBackground = useTransform(scrollY, [0, 100], ['rgba(0, 0, 0, 0)', 'rgba(10, 10, 20, 0.95)']);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -29,8 +22,15 @@ const Navbar = () => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
     }
   };
+
+  const navItems = [
+    { name: 'Home', id: 'hero' },
+    { name: 'Services', id: 'parallax' },
+    { name: 'Plans', id: 'pricing' },
+  ];
 
   return (
     <motion.header
@@ -44,53 +44,84 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.div
-        className="flex items-center"
-        whileHover={{ scale: 1.05 }}
-        transition={{ type: "spring", stiffness: 400, damping: 10 }}
-      >
+      <motion.div className="flex items-center" whileHover={{ scale: 1.05 }}>
         <Layers className="h-8 w-8 text-purple-500 mr-2" />
         <span className="text-xl md:text-2xl font-bold gradient-text">DeFi-Tasker</span>
       </motion.div>
 
+      {/* Hamburger Icon */}
+      <motion.button
+        className="md:hidden flex items-center justify-center z-50"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        whileTap={{ scale: 0.9 }}
+      >
+        {isMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
+      </motion.button>
+
+      {/* Navigation Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 backdrop-blur-lg flex flex-col items-center justify-center space-y-6"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 20, stiffness: 150 }}
+          >
+            {navItems.map((item, index) => (
+              <motion.a
+                key={item.id}
+                className="text-2xl text-gray-200 hover:text-white font-semibold"
+                onClick={() => scrollToSection(item.id)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
+              >
+                {item.name}
+              </motion.a>
+            ))}
+
+            <motion.div className="flex flex-col space-y-4 mt-6 w-60">
+              <motion.button
+                className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Join as Worker
+              </motion.button>
+              <motion.button
+                className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Join as User
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center space-x-6 lg:space-x-10">
-        {[
-          { name: 'Home', id: 'hero' },
-          { name: 'Services', id: 'parallax' },
-          { name: 'Plans', id: 'pricing' },
-        ].map((item) => (
+        {navItems.map((item) => (
           <motion.a
             key={item.id}
-            className="relative text-gray-200 hover:text-white transition-colors cursor-pointer px-3 py-2"
+            className="text-gray-200 hover:text-white transition-colors cursor-pointer"
             onClick={() => scrollToSection(item.id)}
             whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
             {item.name}
-            <span className="absolute inset-0 border border-purple-500 opacity-0 hover:opacity-100 bg-black/40 transition-all duration-300"></span>
           </motion.a>
         ))}
       </nav>
 
-
-      <div className="flex space-x-4">
-        <motion.button
-          className="px-6 py-2 border-2 border-purple-500 text-white rounded-full transition-all relative overflow-hidden bg-purple-700 hover:bg-black"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="relative z-10 text-white hover:text-purple-500 transition-colors duration-300">
-            Join as Worker
-          </span>
+      {/* Desktop Buttons */}
+      <div className="hidden md:flex space-x-4">
+        <motion.button className="px-6 py-2 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black" whileHover={{ scale: 1.05 }}>
+          Join as Worker
         </motion.button>
-        <motion.button
-          className="px-6 py-2 border-2 border-purple-500 text-white rounded-full transition-all relative overflow-hidden bg-purple-700 hover:bg-black"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="relative z-10 text-white hover:text-purple-500 transition-colors duration-300">
-            Join as User
-          </span>
+        <motion.button className="px-6 py-2 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black" whileHover={{ scale: 1.05 }}>
+          Join as User
         </motion.button>
       </div>
     </motion.header>
