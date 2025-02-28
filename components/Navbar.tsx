@@ -32,6 +32,10 @@ const Navbar = () => {
     { name: 'Plans', id: 'pricing' },
   ];
 
+  // External URLs for your buttons
+  const workerAppUrl = "https://worker-frontend.vercel.app "; // Replace with your worker app URL
+  const userAppUrl = "https://user-frontend-eosin.vercel.app "; // Replace with your user app URL
+
   return (
     <motion.header
       className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 flex items-center justify-between"
@@ -71,7 +75,7 @@ const Navbar = () => {
             {navItems.map((item, index) => (
               <motion.a
                 key={item.id}
-                className="text-2xl text-gray-200 hover:text-white font-semibold"
+                className="text-2xl text-gray-200 hover:text-white font-semibold cursor-pointer"
                 onClick={() => scrollToSection(item.id)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -82,20 +86,26 @@ const Navbar = () => {
             ))}
 
             <motion.div className="flex flex-col space-y-4 mt-6 w-60">
-              <motion.button
-                className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all"
+              <motion.a
+                href={workerAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all text-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Join as Worker
-              </motion.button>
-              <motion.button
-                className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all"
+              </motion.a>
+              <motion.a
+                href={userAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all text-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Join as User
-              </motion.button>
+              </motion.a>
             </motion.div>
           </motion.div>
         )}
@@ -117,12 +127,24 @@ const Navbar = () => {
 
       {/* Desktop Buttons */}
       <div className="hidden md:flex space-x-4">
-        <motion.button className="px-6 py-2 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black" whileHover={{ scale: 1.05 }}>
+        <motion.a
+          href={workerAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-2 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black text-center"
+          whileHover={{ scale: 1.05 }}
+        >
           Join as Worker
-        </motion.button>
-        <motion.button className="px-6 py-2 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black" whileHover={{ scale: 1.05 }}>
+        </motion.a>
+        <motion.a
+          href={userAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-2 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black text-center"
+          whileHover={{ scale: 1.05 }}
+        >
           Join as User
-        </motion.button>
+        </motion.a>
       </div>
     </motion.header>
   );
