@@ -81,15 +81,18 @@ const Navbar = () => {
               </motion.a>
             ))}
 
-            <motion.div className="flex flex-col space-y-4 mt-6 w-60">
+          <motion.div className="flex flex-col space-y-4 mt-6 w-60">
               <motion.button
+                href="https://worker-frontend.vercel.app"
                 className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+              
               >
                 Join as Worker
               </motion.button>
               <motion.button
+                href="https://user-frontend-eosin.vercel.app"
                 className="px-6 py-3 border-2 border-purple-500 text-white rounded-full bg-purple-700 hover:bg-black transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
